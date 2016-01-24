@@ -4,6 +4,11 @@ sys.path.append(os.path.abspath('..'))
 from models.ProgModel import ProgModel
 from models.VideosModel import VideosModel
 
+VID_READY = 'ready'
+VID_PROCESSING = 'processing'
+VID_DONE = 'done'
+VID_ERR = 'err'
+
 class VideosController(object):
     def __init__(self):
         pass
@@ -19,13 +24,13 @@ class VideosController(object):
     # VideosModel Controller
     def addVideo(self, videoPaths):
         filteredVideoPaths = self.checkList(videoPaths)
-        print filteredVideoPaths
 
         for videopath in filteredVideoPaths:
             video, created = VideosModel.create_or_get(
                 url=videopath,
                 output_url=videopath,
+                current_session=True,
                 status=VID_READY)
 
             if video != False:
-                print video
+                video.update(current_session=True, status=VID_READY)

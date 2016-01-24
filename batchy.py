@@ -12,7 +12,6 @@ from models.ProgModel import ProgModel
 from models.VideosModel import VideosModel
 from controller.VideosController import *
 
-# video status
 VID_READY = 'ready'
 VID_PROCESSING = 'processing'
 VID_DONE = 'done'
@@ -42,9 +41,15 @@ class MainWindowClass(QtGui.QMainWindow, form_class):
         self.minusButton.clicked.connect(self.__minusButton)
         self.plusButton.clicked.connect(self.__plusButton)
         self.startButton.clicked.connect(self.__startButton)
-        self.videoProgressBar.setMinimum = 0
-        self.videoProgressBar.setMaximum = 100
-        self.videoProgressBar.setValue = 0
+
+
+        # Somewhat of a hack since QStringListModel can be edited regardless
+        # Fix later
+        self.listViewModel = QtGui.QStringListModel()
+        self.listViewModel.setStringList(["Hello"])
+        self.videoListView.setModel(self.listViewModel)
+        self.videoListView.setWindowTitle("QListView")
+        self.videoListView.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
 
         # setup database
         try:
@@ -70,10 +75,20 @@ class MainWindowClass(QtGui.QMainWindow, form_class):
 
     def __plusButton(self):
         title = self.plusButton.text()
-        video_paths = []
+        videoPaths = []
         for path in QtGui.QFileDialog.getOpenFileNames(self, title):
-            video_paths.append(str(path))
-        self._videosController.addVideo(video_paths)
+            videoPaths.append(str(path))
+        self._videosController.addVideo(videoPaths)
+
+        # Display data to user
+        videoPathsTotal = VideosModel.select().where(VideosModel.current_session == True)
+        
+        plist = []
+        for p in videoPathsTotal:
+            plist.append(p.url)
+
+        # set the view based on model (MVC!)
+        self.listViewModel.setStringList(plist)
 
     def __startButton(self):
         pass
