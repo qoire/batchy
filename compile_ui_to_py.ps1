@@ -1,0 +1,1 @@
+﻿C:\Python27\Scripts\pyside-uic.exe C:\Users\Yao\Documents\GitHub\batchy\views\mainwindow.ui --output C:\Users\Yao\Documents\GitHub\batchy\views\mainwindow.py

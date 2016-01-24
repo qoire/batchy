@@ -21,10 +21,9 @@ class VideosController(object):
                 videoList.append(video)
         return videoList
 
-    # VideosModel Controller
+    # add Video
     def addVideo(self, videoPaths):
         filteredVideoPaths = self.checkList(videoPaths)
-
         for videopath in filteredVideoPaths:
             video, created = VideosModel.create_or_get(
                 url=videopath,
@@ -34,3 +33,17 @@ class VideosController(object):
 
             if video != False:
                 video.update(current_session=True, status=VID_READY)
+
+    # delete Videos that are contained on list
+    def deleteFromList(self, list):
+        q = VideosModel.delete().where(VideosModel.url << list)
+        q.execute()
+
+    # get current
+    def getCurrent(self):
+        return VideosModel.select().where(VideosModel.current_session == True)
+
+    # delete current videos
+    def deleteCurrent(self):
+        vid = VideosModel.select().where(VideosModel.current_session == True)
+        vid.delete_instance()
