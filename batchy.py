@@ -34,7 +34,7 @@ class MainWindowClass(QtGui.QMainWindow):
         self._avisynth_location = ''
 
         self.isWindowFullScreen = False
-        self.setFixedSize(410, 280)
+        self.setFixedSize(410, 322)
 
         # page UI elements
         self.ui.minusButton.clicked.connect(self.__minusButton)
@@ -79,7 +79,7 @@ class MainWindowClass(QtGui.QMainWindow):
         title = self.ui.plusButton.text()
         videoPaths = []
         for path in QtGui.QFileDialog.getOpenFileNames(self, title):
-            videoPaths.append(str(path))
+            videoPaths.append(path)
 
         self._videosController.addVideo(videoPaths[0])
 
