@@ -36,7 +36,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -76,7 +76,165 @@
        <attribute name="title">
         <string>Config Settings</string>
        </attribute>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="2" column="0">
+         <widget class="QCheckBox" name="checkBoxEncodex264">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Encode x264</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QGroupBox" name="groupBox_2">
+          <property name="title">
+           <string>x264 Settings</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QLabel" name="labelx264Quality">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Quality</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="labelx264Recommendation">
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>20</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Recommended</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QSlider" name="sliderx264Quality">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QLabel" name="labelx264Tuning">
+               <property name="text">
+                <string>Tuning</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="comboBoxTuning">
+               <property name="minimumSize">
+                <size>
+                 <width>200</width>
+                 <height>0</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QLabel" name="labelOutputContainer">
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Output Container</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBoxOutputContainer">
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item row="4" column="0">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </widget>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QPushButton" name="pushButton">
+      <property name="maximumSize">
+       <size>
+        <width>80</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>Abort</string>
+      </property>
      </widget>
     </item>
     <item row="4" column="1">
@@ -119,11 +277,27 @@
        <property name="spacing">
         <number>6</number>
        </property>
+       <item row="1" column="0">
+        <widget class="QComboBox" name="configComboBox"/>
+       </item>
+       <item row="1" column="2">
+        <widget class="QPushButton" name="startButton_2">
+         <property name="maximumSize">
+          <size>
+           <width>40</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Save</string>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="1">
         <widget class="QPushButton" name="configNewBtn">
          <property name="maximumSize">
           <size>
-           <width>60</width>
+           <width>40</width>
            <height>16777215</height>
           </size>
          </property>
@@ -132,36 +306,20 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="2">
-        <widget class="QPushButton" name="startButton_2">
+       <item row="1" column="3">
+        <widget class="QPushButton" name="pushButton_2">
          <property name="maximumSize">
           <size>
-           <width>60</width>
+           <width>40</width>
            <height>16777215</height>
           </size>
          </property>
          <property name="text">
-          <string>Edit</string>
+          <string>Delete</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QComboBox" name="configComboBox"/>
-       </item>
       </layout>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QPushButton" name="pushButton">
-      <property name="maximumSize">
-       <size>
-        <width>80</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>Abort</string>
-      </property>
      </widget>
     </item>
    </layout>
