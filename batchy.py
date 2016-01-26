@@ -34,11 +34,8 @@ class MainWindowClass(QtGui.QMainWindow):
         self._avisynth_location = ''
 
         self.isWindowFullScreen = False
-        self.setFixedSize(410, 322)
 
         # page UI elements
-        self.ui.minusButton.clicked.connect(self.__minusButton)
-        self.ui.plusButton.clicked.connect(self.__plusButton)
         self.ui.startButton.clicked.connect(self.__startButton)
 
         # menu UI elements
@@ -85,7 +82,7 @@ class MainWindowClass(QtGui.QMainWindow):
 
         # Display data to user
         videoPathsTotal = self._videosController.getCurrent()
-        
+
         plist = []
         for p in videoPathsTotal:
             self.ui.videoListWidget.addItem(p.url)
