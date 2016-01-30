@@ -38,12 +38,11 @@ class ConfigController(object):
 
     def copySelectedConfigToTemp(self, i):
         q = ConfigModel.select(ConfigModel)
-        temp_profile = ConfigModel.update(
+        temp_query = ConfigModel.update(
             encode = q[i].encode,
             x264_quality = q[i].x264_quality,
             x264_tuning = q[i].x264_tuning,
             output_container = q[i].output_container).where(
                 ConfigModel.name == 'TempProfile'
                 )
-
-    def
+        temp_query.execute()

@@ -11,7 +11,7 @@ from PySide import QtCore, QtGui
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
+        MainWindow.setObjectName("")
         MainWindow.resize(500, 400)
         MainWindow.setMinimumSize(QtCore.QSize(500, 400))
         self.centralwidget = QtGui.QWidget(MainWindow)

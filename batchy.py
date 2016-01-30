@@ -36,6 +36,9 @@ class MainWindowClass(QtGui.QMainWindow):
 
         self.isWindowFullScreen = False
 
+        # Class parameters
+        self.profile_str = "* Temp Profile *"
+
         # connect database!
         globvar.db.connect()
 
@@ -68,25 +71,6 @@ class MainWindowClass(QtGui.QMainWindow):
         for p in videoPaths:
             self.ui.videoListWidget.addItem(p.url)
 
-        # page UI elements
-        self.ui.startButton.clicked.connect(self.__startButton)
-
-        # menu UI elements
-        self.ui.actionOpen.triggered.connect(self.__actionOpen)
-        self.ui.actionRemoveAll.triggered.connect(self.__actionRemoveAll)
-        self.ui.comboBoxTuning.currentIndexChanged.connect(
-            self.__comboBoxTuningCurrentIndexChanged)
-        self.ui.comboBoxOutputContainer.currentIndexChanged.connect(
-            self.__comboBoxOutputContainerCurrentIndexChanged)
-        self.ui.configComboBox.currentIndexChanged.connect(
-            self.__comboBoxConfigCurrentIndexChanged)
-
-        # config_page elements
-        self.ui.sliderx264Quality.setMinimum(0)
-        self.ui.sliderx264Quality.setMaximum(30)
-        self.ui.sliderx264Quality.setTickInterval(1);
-        self.ui.sliderx264Quality.valueChanged.connect(self.__sliderx264Quality)
-
         # config_page combo boxes
         self.ui.comboBoxTuning.clear()
         for i in globvar.tuningParameters:
@@ -109,7 +93,7 @@ class MainWindowClass(QtGui.QMainWindow):
 
         if config_amt == 1:
             # This means only profile available is TempProfile
-            self.ui.configComboBox.addItem('*temp*')
+            self.ui.configComboBox.addItem(self.profile_str)
         elif config_amt == 0:
             # Something is horribly wrong
             resetConfigState()
@@ -123,9 +107,32 @@ class MainWindowClass(QtGui.QMainWindow):
         # Output Tuning
         self.setComboBoxTuningParameter(config_query[0])
 
+        # Connections
+        # page UI elements
+        self.ui.startButton.clicked.connect(self.__startButton)
+
+        # menu UI elements
+        self.ui.actionOpen.triggered.connect(self.__actionOpen)
+        self.ui.actionRemoveAll.triggered.connect(self.__actionRemoveAll)
+        self.ui.comboBoxTuning.currentIndexChanged.connect(
+            self.__comboBoxTuningCurrentIndexChanged)
+        self.ui.comboBoxOutputContainer.currentIndexChanged.connect(
+            self.__comboBoxOutputContainerCurrentIndexChanged)
+        self.ui.configComboBox.currentIndexChanged.connect(
+            self.__comboBoxConfigCurrentIndexChanged)
+
+        # config_page elements
+        self.ui.sliderx264Quality.setMinimum(0)
+        self.ui.sliderx264Quality.setMaximum(30)
+        self.ui.sliderx264Quality.setTickInterval(1);
+        self.ui.sliderx264Quality.valueChanged.connect(
+            self.__sliderx264Quality)
+
+        self.ui.checkBoxEncodex264.stateChanged.connect(
+            self.__checkBoxEncodex264)
+
     def resetConfigState(self):
         pass
-
 
     # Setters for manipulating the view
     # Try to uniformly define the input parameter for any of these functions
@@ -162,6 +169,35 @@ class MainWindowClass(QtGui.QMainWindow):
             # This shouldnt happen (but just in case)
             self.ui.comboBoxTuning.setCurrentIndex(0)
 
+    def setConfigBoxToTemp(self):
+        if globvar.isProfileTempDisplayed == False:
+            self.ui.configComboBox.addItem(self.profile_str)
+            index = self.ui.configComboBox.findText(self.profile_str)
+            self.ui.configComboBox.setCurrentIndex(index)
+            globvar.isProfileTempDisplayed = True
+        else:
+            index = self.ui.configComboBox.findText(self.profile_str)
+            self.ui.configComboBox.setCurrentIndex(index)
+
+    def setTempProfileIfRequired(self):
+        if globvar.isProfileTemp == False:
+            config_index, config_q = self.getCurrentConfig()
+            self._configController.copySelectedConfigToTemp(config_index)
+            self.setConfigBoxToTemp()
+        globvar.isProfileTemp = True
+
+
+    # Getters
+    # Do not modify the model from here, add such functions
+    # To respective controller
+
+    def getCurrentConfig(self):
+        config_index = self.ui.configComboBox.currentIndex()
+        return config_index, (ConfigModel.select(ConfigModel))[config_index]
+
+    # Signal Handlers
+
+    # View utility functions
 
     def __startButton(self):
         pass
@@ -201,28 +237,21 @@ class MainWindowClass(QtGui.QMainWindow):
         elif (s_val > 23):
             output_str = output_str + 'Yuck'
 
+        self.setTempProfileIfRequired()
         self.ui.labelx264Recommendation.setText(output_str)
 
     def __comboBoxTuningCurrentIndexChanged(self, i):
-
-        if globvar.isProfileTemp == False:
-            self._configController.copySelectedConfigToTemp(i)
-
-        globvar.isProfileTemp = True
+        self.setTempProfileIfRequired()
 
     def __comboBoxOutputContainerCurrentIndexChanged(self, i):
-
-        if globvar.isProfileTemp == False:
-            self._configController.copySelectedConfigToTemp(i)
-
-        globvar.isProfileTemp = True
+        self.setTempProfileIfRequired()
 
     def __comboBoxConfigCurrentIndexChanged(self, i):
+        if self.ui.configComboBox.currentText != self.profile_str:
+            globvar.isProfileTemp = False
 
-        if globvar.isProfileTemp ==False:
-            self._configController.copySelectedConfigToTemp(i)
-
-        globvar.isProfileTemp = True
+    def __checkBoxEncodex264(self, i):
+        self.setTempProfileIfRequired()
 
 
     # Keyboard handler

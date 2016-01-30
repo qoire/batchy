@@ -20,3 +20,4 @@ outputContainers = [
     ]
 
 isProfileTemp = False
+isProfileTempDisplayed = False
