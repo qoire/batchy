@@ -100,10 +100,8 @@ class MainWindowClass(QtGui.QMainWindow):
 
         # We load initial based on the [0] entry of the config table
         self.setCheckBoxEncodex264State(config_query[0])
-
         # Slider
         self.setSliderx264Quality(config_query[0])
-
         # Output Tuning
         self.setComboBoxTuningParameter(config_query[0])
 
@@ -146,28 +144,23 @@ class MainWindowClass(QtGui.QMainWindow):
         else:
             self.ui.checkBoxEncodex264.setCheckState(Qt.Unchecked)
 
+    def setComboBoxOutputContainerState(self, q):
+        pass
+
     def setComboBoxTuningParameter(self, q):
         tuning = q.x264_tuning
 
-        if tuning == globvar.tuningParameters[0]:
+        index = 0
+        tuning_parameter_set = False
+        for tuning_parameter in globvar.tuningParameters:
+            if tuning == tuning_parameter:
+                self.ui.comboBoxTuning.setCurrentIndex(index)
+                tuning_parameter_set = True
+            index = index + 1
+
+        if !tuning_parameter_set:
             self.ui.comboBoxTuning.setCurrentIndex(0)
-        elif tuning == globvar.tuningParameters[1]:
-            self.ui.comboBoxTuning.setCurrentIndex(1)
-        elif tuning == globvar.tuningParameters[2]:
-            self.ui.comboBoxTuning.setCurrentIndex(2)
-        elif tuning == globvar.tuningParameters[3]:
-            self.ui.comboBoxTuning.setCurrentIndex(3)
-        elif tuning == globvar.tuningParameters[4]:
-            self.ui.comboBoxTuning.setCurrentIndex(4)
-        elif tuning == globvar.tuningParameters[5]:
-            self.ui.comboBoxTuning.setCurrentIndex(5)
-        elif tuning == globvar.tuningParameters[6]:
-            self.ui.comboBoxTuning.setCurrentIndex(6)
-        elif tuning == globvar.tuningParameters[7]:
-            self.ui.comboBoxTuning.setCurrentIndex(7)
-        else:
-            # This shouldnt happen (but just in case)
-            self.ui.comboBoxTuning.setCurrentIndex(0)
+
 
     def setConfigBoxToTemp(self):
         if globvar.isProfileTempDisplayed == False:
@@ -186,6 +179,19 @@ class MainWindowClass(QtGui.QMainWindow):
             self.setConfigBoxToTemp()
         globvar.isProfileTemp = True
 
+    def setViewToConfig(self, i):
+        config_query = (ConfigModel.select(ConfigModel))[i]
+
+        # Only disable necessary widgets
+        self.ui.comboBoxTuning.setUpdatesEnabled(False)
+        self.ui.comboBoxOutputContainer.setUpdatesEnabled(False)
+        self.ui.checkBoxEncodex264.setUpdatesEnabled(False)
+        self.ui.sliderx264Quality.setUpdatesEnabled(False)
+
+        # Set View to Configs
+        self.ui.setCheckBoxEncodex264State(config_query)
+        self.ui.setSliderx264Quality(config_query)
+        self.ui.setComboBoxTuningParameter(config_query)
 
     # Getters
     # Do not modify the model from here, add such functions
@@ -249,6 +255,8 @@ class MainWindowClass(QtGui.QMainWindow):
     def __comboBoxConfigCurrentIndexChanged(self, i):
         if self.ui.configComboBox.currentText != self.profile_str:
             globvar.isProfileTemp = False
+
+        self.setViewToConfig(i)
 
     def __checkBoxEncodex264(self, i):
         self.setTempProfileIfRequired()
